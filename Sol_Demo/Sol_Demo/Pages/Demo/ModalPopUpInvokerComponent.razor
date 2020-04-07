@@ -1,0 +1,45 @@
+﻿@inject IModalService Modal
+
+    <div class="form-group">
+        <label for="txtSendData">Send String Value to Pop Up Model:</label>
+        <input id="txtSendData" @bind="SendDataToModalPopUp" type="text" class="form-control"  placeholder="Send String Value to Pop Up Model" />
+    </div>
+
+<button @onclick="ShowModal" class="btn btn-primary">View Modal PopUp</button>
+
+@if (fName != null && lName != null)
+{
+<div class="alert alert-info">
+    <h3>First Name : @fName</h3>
+    <br/>
+    <h3>Last Name : @lName</h3>
+</div>
+}
+
+@code {
+
+    private String SendDataToModalPopUp { get; set; }
+
+    private String fName { get; set; }
+    private String lName { get; set; }
+
+    private async Task ShowModal()
+    {
+        var modelPopParameter = new ModalParameters();
+        modelPopParameter.Add("ValueComeFromInvokerDemo", SendDataToModalPopUp);
+
+
+        var modelRef= Modal.Show<ModalPopupComponent>("Modal PopUp Demo",modelPopParameter);
+        var result = await modelRef.Result;
+
+        if (result.Cancelled == false)
+        {
+            var data = (dynamic)result.Data;
+
+            fName = data.FirstName;
+            lName = data.LastName;
+
+        }
+
+    }
+}

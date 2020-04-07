@@ -1,0 +1,49 @@
+﻿
+<div>
+    <p>
+        Value coming from Modal Pop Invoker:
+        <b> @ValueComeFromInvokerDemo </b>
+    </p>
+</div>
+
+<div class="simple-form">
+
+    <div class="form-group">
+        <label for="first-name">First Name</label>
+        <input @bind="FirstName" type="text" class="form-control" id="first-name" placeholder="Enter First Name" />
+    </div>
+
+    <div class="form-group">
+        <label for="last-name">Last Name</label>
+        <input @bind="LastName" type="text" class="form-control" id="last-name" placeholder="Enter Last Name" />
+    </div>
+
+    <button @onclick="SubmitForm" class="btn btn-primary">Submit</button>
+    <button @onclick="Cancel" class="btn btn-secondary">Cancel</button>
+</div>
+
+
+@code {
+
+    [CascadingParameter]
+    public BlazoredModalInstance BlazoredModal { get; set; }
+
+    [Parameter]
+    public String ValueComeFromInvokerDemo { get; set; }
+
+    private String FirstName { get; set; }
+    private String LastName { get; set; }
+
+    void SubmitForm()
+    {
+        // Close PopUp Modal and Send Data to Invoker Component
+        //BlazoredModal.Close(ModalResult.Ok($"Form was submitted successfully."));
+        BlazoredModal.Close(ModalResult.Ok<dynamic>(new { FirstName = FirstName, LastName = LastName }));
+    }
+
+    void Cancel()
+    {
+        BlazoredModal.Cancel();
+    }
+
+}
